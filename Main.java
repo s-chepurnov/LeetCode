@@ -1,9 +1,15 @@
 import java.util.*;
 
 /**
+ * Directed graph
+ *
  * 210. Course Schedule II
  *
- * Directed graph
+ * Input: 4, [[1,0],[2,0],[3,1],[3,2]]
+ * Output: [0,1,2,3] or [0,2,1,3]
+ * Explanation: There are a total of 4 courses to take. To take course 3 you should have finished both
+ * courses 1 and 2. Both courses 1 and 2 should be taken after you finished course 0.
+ * So one correct course order is [0,1,2,3]. Another correct ordering is [0,2,1,3] .
  */
 public class Main {
     public static void main(String[] args) {
