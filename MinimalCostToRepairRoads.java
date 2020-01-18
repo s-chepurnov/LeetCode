@@ -19,7 +19,9 @@ import java.util.*;
  *Output: Return an integer representing the minimum total cost to repair some roads so that all
  *the cities are accessible from each other.
  *
- * Additional information about data structures and Kruskal algorithm from this example: https://algs4.cs.princeton.edu/43mst/ 
+ * The solution based on Kruskal algorithm
+ * Illustartion about this solution: https://www.youtube.com/watch?v=Gi9KeUO4UTo&list=PLRdD1c6QbAqJn0606RlOR6T3yUqFWKwmX&index=68
+ * Additional information about data structures from this example: https://algs4.cs.princeton.edu/43mst/ 
  */
 public class MinimalCostToRepairRoads {
 
