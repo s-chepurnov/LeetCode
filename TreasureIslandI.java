@@ -7,7 +7,8 @@ import java.util.Objects;
 
 /**
  *
- * recursive decision, but it is better to do it iteratively (dfs or bfs) with stack or queue
+ * recursive decision, 
+ * but it is better to do it iteratively (bfs with queue) because in that case we traverse the array only once!
  *
  */
 public class TreasureIslandI {
