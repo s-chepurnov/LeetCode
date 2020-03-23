@@ -1,5 +1,8 @@
 package org.algs4;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Write a function solution that, given an array A of N integers representing the time of execution of consecutive tasks,
  * returns true if it is possible for the load balancer to choose two requests that will determine an even distribution
@@ -15,10 +18,24 @@ public class LoadBalancer {
     public static void main(String[] args) {
         SolutionLB solution = new SolutionLB();
 
-        int[] A = {1, 3, 4, 2, 2, 2, 1, 1, 2}; //true
+        //int[] A = {4, 8, 4, 8, 4}; //true
+        //int[] A = {1}; //false
+        //int[] A = {1, 3, 4, 2, 2, 2, 1, 1, 2}; //true
         //int[] A = {1, 1, 1, 1, 1, 1}; //false
+        //int[] A = {1, 1, 1, 1}; //false
+        //int[] A = {2, 4, 5, 3, 3, 9, 2, 2, 2}; //true
 
-        boolean result = solution.load_balance(A);
+
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < 10000; ++i) {
+            list.add(1);
+            list.add(2);
+        }
+
+
+        int[] A = list.stream().mapToInt(i->i).toArray(); //([1, 2] * 10000) // true
+
+        boolean result = solution.loadBalance(A);
         System.out.println("isPossible: " + result);
     }
 
@@ -26,38 +43,49 @@ public class LoadBalancer {
 
 class SolutionLB {
 
-    public boolean load_balance(int[] requests) {
+    public boolean loadBalance(int[] arr) {
 
-        if(requests.length == 0)
+        if(arr.length < 5) // 8 1 8 1 8
             return false;
 
         int allSum = 0;
-        for (int i = 0; i < requests.length; ++i) {
-            allSum+=requests[i];
+        for (int i = 0; i < arr.length; ++i) {
+            allSum+=arr[i];
         }
 
-        return recursive(requests, requests[0], 0, allSum, 1,requests.length-1);
-    }
+        //init data
+        int left = 0;
+        int right = arr.length-1;
 
+        int leftSum = arr[left];
+        int rightSum = arr[right];
 
-    public boolean recursive(int[] requests, int leftSum, int rightSum, int allSum, int left, int right) {
+        //requests[left+1] - left pivot
+        //requests[right-1] - right pivot
+        while (left < right) {
 
-        int middleSum = allSum - leftSum - rightSum - requests[left] - requests[right];
+            if (leftSum == rightSum) {
+                int middleSum = allSum - leftSum - rightSum - arr[left+1] - arr[right-1];
 
-        if (leftSum < rightSum) {
-            leftSum+=requests[left];
-            ++left;
-        } else if(leftSum > rightSum) {
-            rightSum+=requests[right];
-            --right;
-        } else if(leftSum == rightSum && leftSum == middleSum) {
-            return true;
-        } else if (left == right || leftSum < middleSum || rightSum > middleSum) {
-            return false;
+                if (middleSum == leftSum && middleSum == rightSum && ((right - left) > 1)) {
+                    return true;
+                } else {
+                    ++left;
+                    --right;
+                    leftSum+=arr[left];
+                    rightSum+=arr[right];
+                }
+
+            } else if(leftSum < rightSum) {
+                ++left;
+                leftSum+=arr[left];
+            } else {
+                --right;
+                rightSum+=arr[right];
+            }
         }
 
-        return recursive(requests, leftSum, rightSum, allSum, left, right);
+        return false;
     }
-
 
 }

@@ -5,43 +5,57 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- *
  *   Given a two 2D integer array, find the max score of a path from the upper left cell to bottom right cell
  *   that doesn't visit any of the cells twice. The score of a path is the minimum value in that path.
- *
  */
 public class MaximalMinimumValuePathII {
 
-    public static List<List<Integer>> result = new ArrayList<>();
-
     public static void main(String[] args) {
 
-        int[][] input = {
+        /*
+        //Expected: 3
+        int[][] matrix = {
                 {7,5,3},
                 {2,0,9},
                 {4,5,9}
         };
+        */
 
-        int maxScore = solve(input);
+        //Expected 0
+        int matrix[][] = {{0, 1},{0, 2},{1, 3},{2, 3},{2, 5},{5, 6},{3, 4}};
+
+        /*
+        //Expected 1
+        int[][] matrix = {  {1, 5, 3},
+                            {2, 0, 9},
+                            {4, 5, 9}
+        };
+        */
+
+        SolutionPathII sl = new SolutionPathII();
+        int maxScore = sl.maxPathScore(matrix);
         System.out.println("max score: " + maxScore);
     }
 
-    public static int solve(int[][] input) {
+}
 
+class SolutionPathII {
+
+    public List<List<Integer>> result = new ArrayList<>();
+
+    public int maxPathScore(int[][] matrix) {
         List<Integer> path = new ArrayList<>();
-        boolean[][] visited = new boolean[input.length][input[0].length];
+        boolean[][] visited = new boolean[matrix.length][matrix[0].length];
 
-        recursive(input, 0, 0, path, visited);
-        System.out.println("result.size: " +  result.size());
-        int maxScore = result.stream().map(list -> list
-                                                   .stream()
-                                                   .min(Comparator.comparingInt(Integer::valueOf)).get())
+        recursive(matrix, 0, 0, path, visited);
+        //System.out.println("result.size: " + result.size());
+
+        int maxScore = result.stream().map(list -> list.stream().min(Comparator.comparingInt(Integer::valueOf)).get())
                                       .max(Comparator.comparingInt(Integer::valueOf)).get();
-
         return maxScore;
     }
 
-    public static void recursive(int[][] input, int x, int y, List<Integer> path, boolean[][] visited) {
+    public void recursive(int[][] input, int x, int y, List<Integer> path, boolean[][] visited) {
 
         // isValid point
         int x_size = input.length;
@@ -54,7 +68,7 @@ public class MaximalMinimumValuePathII {
         path.add(input[x][y]);
 
         //if touch the end point
-        if(x == input.length-1 && y == input[0].length-1) {
+        if (x == input.length - 1 && y == input[0].length - 1) {
             result.add(path);
         }
 
@@ -70,14 +84,13 @@ public class MaximalMinimumValuePathII {
     }
 
 
-    public static void copy(boolean[][] src, boolean[][] dest) {
+    public void copy(boolean[][] src, boolean[][] dest) {
 
         for (int i = 0; i < src.length; ++i) {
             for (int j = 0; j < src[0].length; ++j) {
-                   dest[i][j] = src[i][j];
+                dest[i][j] = src[i][j];
             }
         }
     }
-
-
 }
+

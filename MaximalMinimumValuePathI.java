@@ -20,61 +20,76 @@ import java.util.List;
  */
 public class MaximalMinimumValuePathI {
 
-    public static List<List<Integer>> result = new ArrayList<>();
 
     public static void main(String[] args) {
+        /*
+        //Expected: 4
+        int[][] matrix = {{5,1},
+                          {4,5}};
+        */
 
-        int[][] input = {
+        /*
+        //Expected: 0
+        int[][] matrix = {{0}};
+        */
+
+        /*
+        //Expected: 3
+        int[][] matrix = {
                 {7,5,3},
                 {2,0,9},
                 {4,5,9}
         };
+        */
 
-        int maxScore = solve(input);
+
+        //Expected: 1
+        int[][] matrix = {  {1, 5, 3},
+                            {2, 0, 9},
+                            {4, 5, 9}};
+
+
+        SolutionPathI sl = new SolutionPathI();
+        int maxScore = sl.maxPathScore(matrix);
 
         System.out.println("max score: " + maxScore);
     }
 
-    public static int solve(int[][] input) {
+}
 
+class SolutionPathI {
+
+    public List<List<Integer>> result = new ArrayList<>();
+
+    public int maxPathScore(int[][] matrix) {
         List<Integer> path = new ArrayList<>();
-        recursive(input, 0, 0, path);
+        recursive(matrix, 0, 0, path);
 
-        int maxScore = result.stream().map(list -> list
-                                                   .stream()
-                                                   .min(Comparator.comparingInt(Integer::valueOf)).get())
+        int maxScore = result.stream().map(list -> list.stream().min(Comparator.comparingInt(Integer::valueOf)).get())
                                       .max(Comparator.comparingInt(Integer::valueOf)).get();
 
         return maxScore;
     }
 
-    public static void recursive(int[][] input, int x, int y, List<Integer> path) {
+    public void recursive(int[][] matrix, int x, int y, List<Integer> path) {
 
-        if( !valid(input, x, y)) {
-            return;
-        }
+        //if not valid - return
+        int x_size = matrix.length;
+        int y_size = matrix[0].length;
+        if (x < 0 || x >= x_size || y < 0 || y >= y_size) return;
 
-        path.add(input[x][y]);
+        //if valid - add point to path
+        path.add(matrix[x][y]);
 
-        if(x == input.length-1 && y == input[0].length-1) {
+        //if path is completed - add it to result
+        if(x == matrix.length-1 && y == matrix[0].length-1) {
             result.add(path);
         }
 
-        recursive(input, x + 1, y, new ArrayList<>(path));
-        recursive(input, x, y + 1, new ArrayList<>(path));
+        // go down and right
+        recursive(matrix, x + 1, y, new ArrayList<>(path));
+        recursive(matrix, x, y + 1, new ArrayList<>(path));
 
-    }
-
-    public static boolean valid(int[][] input, int x, int y) {
-
-        int x_size = input.length;
-        int y_size = input[0].length;
-
-        if (x >= 0 && x < x_size && y >= 0 && y < y_size) {
-            return true;
-        }
-
-        return false;
     }
 
 }

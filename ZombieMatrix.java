@@ -16,9 +16,8 @@ import java.util.List;
 
 public class ZombieMatrix {
 
-    public static int DIRS[][] = {{1,0}, {0,1}, {-1,0}, {0, -1}};
-
     public static void main(String[] args) {
+
 
         int[][] arr = {{0, 1, 1, 0, 1},
                      {0, 1, 0, 1, 0},
@@ -26,26 +25,48 @@ public class ZombieMatrix {
                      {0, 1, 0, 0, 0}};
 
 
-        int days = 0;
-        do {
-            ++days;
-            solve(arr);
-        } while ( !check(arr));
-
-        System.out.println("# days: " + days);
-
+        /*
+        int[][] arr = {{0}};
+        */
+/*
+        int[][] arr = {{1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1}};
+*/
+        SolutionZombie sl = new SolutionZombie();
+        int n = sl.humanDays(arr);
+        System.out.println("# days: " + n);
     }
 
+}
 
-    public static void solve(int arr[][]) {
+class SolutionZombie {
 
-        List<Point> stepPoints = new ArrayList<>();
+    public int DIRS[][] = {{1,0}, {0,1}, {-1,0}, {0, -1}};
+
+    public int humanDays(int[][] matrix) {
+        if (matrix == null || noZombieAtAll(matrix)) {
+            return -1; // no Zombie exist
+        }
+
+        int days = 0;
+        while( !isAllElementsAreZombie(matrix)) {
+            solve(matrix);
+            ++days;
+        }
+
+        return days;
+    }
+
+    public void solve(int[][] matrix) {
+        List<Point> stepPoints = new ArrayList<>(1000);
 
         //save all Zombie positions
-        for (int i = 0; i < arr.length; ++i) {
-            for (int j = 0; j < arr[0].length; ++j) {
+        for (int i = 0; i < matrix.length; ++i) {
+            for (int j = 0; j < matrix[0].length; ++j) {
 
-                if (arr[i][j] == 1) {
+                if (matrix[i][j] == 1) {
                     Point point = new Point(i, j);
                     stepPoints.add(point);
                 }
@@ -59,27 +80,22 @@ public class ZombieMatrix {
                 int r = p.x + dir[0];
                 int c = p.y + dir[1];
 
-                if (valid(arr,r,c)) {
-                    arr[r][c] = 1;
+                //if valid coordinates
+                int x_size = matrix.length;
+                int y_size = matrix[0].length;
+
+                if (r >= 0 && r < x_size && c >= 0 && c < y_size) {
+                    matrix[r][c] = 1;
                 }
             }
         }
 
-        /* represent
-        for(int s = 0 ; s < arr.length; ++s) {
-            System.out.println(Arrays.toString(arr[s]));
-        }
-
-        System.out.println("");
-        */
-
     }
 
-    public static boolean check (int[][] arr) {
+    public boolean isAllElementsAreZombie(int[][] arr) {
 
         for (int i = 0; i < arr.length; ++i) {
             for (int j = 0; j < arr[0].length; ++j) {
-
                 if (arr[i][j] == 0) {
                     return false;
                 }
@@ -87,20 +103,21 @@ public class ZombieMatrix {
         }
 
         return true;
-
     }
 
-    public static boolean valid(int[][] input, int x, int y) {
+    public boolean noZombieAtAll(int[][] arr) {
 
-        int x_size = input.length;
-        int y_size = input[0].length;
-
-        if (x >= 0 && x < x_size && y >= 0 && y < y_size) {
-            return true;
+        for (int i = 0; i < arr.length; ++i) {
+            for (int j = 0; j < arr[0].length; ++j) {
+                if (arr[i][j] == 1) {
+                    return false;
+                }
+            }
         }
 
-        return false;
+        return true;
     }
+
 }
 
 class Point {

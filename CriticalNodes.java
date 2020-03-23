@@ -1,35 +1,52 @@
 package org.algs4;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
+ * Given an undirected graph, find out all the vertices when removed will make the graph disconnected.
+ * Initially the graph is connected.
  *
  * It is a brute force solution
- *
- * "Articulation point" method described below:
- * https://leetcode.com/discuss/interview-question/436073/
- *
  */
+
 public class CriticalNodes {
 
     public static void main(String[] args) {
 
-        //original input
+        /*
+        // Expected [2,3,5]
         int nodeNum = 7;
-        int[][] edges = {{0,1}, {0, 2}, {1, 3}, {2, 3}, {2, 5}, {5, 6}, {3,4}};
+        int[][] graph = {{0,1}, {0, 2}, {1, 3}, {2, 3}, {2, 5}, {5, 6}, {3,4}};
+        */
+
+        int nodeNum = 8;
+        int[][] graph = {{0, 1},{1, 2},{3, 4},{4, 6},{5, 6},{6, 7}};
+        //Expected: [6, 4, 1]
+        //Output: [0, 1, 2, 3, 4, 6, 5, 7]
+
+        SolutionCN solutionCN = new SolutionCN();
+        int[] result = solutionCN.findCriticalNodes(nodeNum, graph);
+
+        System.out.println(Arrays.toString(result));
+    }
+
+}
+
+class SolutionCN {
+
+    public int[] findCriticalNodes(int nodeNum, int[][] graph) {
+
+        int ccInitial = checkConnection(nodeNum, graph);
 
         List<Integer> answer = new ArrayList<>();
 
         //find all unique vertices
         List<Integer> vertices = new ArrayList<>();
-        for (int i = 0; i < edges.length; ++i) {
-            for (int j = 0; j < edges[0].length; ++j) {
+        for (int i = 0; i < graph.length; ++i) {
+            for (int j = 0; j < graph[0].length; ++j) {
 
-                if ( !vertices.contains(edges[i][j])) {
-                    vertices.add(edges[i][j]);
+                if (!vertices.contains(graph[i][j])) {
+                    vertices.add(graph[i][j]);
                 }
 
             }
@@ -43,10 +60,10 @@ public class CriticalNodes {
 
             //convert Array to List
             List<List<Integer>> edgeList = new ArrayList<>();
-            for (int i = 0; i < edges.length; ++i) {
+            for (int i = 0; i < graph.length; ++i) {
                 ArrayList<Integer> vw = new ArrayList<>();
-                for (int j = 0; j < edges[0].length; ++j) {
-                    vw.add(edges[i][j]);
+                for (int j = 0; j < graph[0].length; ++j) {
+                    vw.add(graph[i][j]);
                 }
                 edgeList.add(vw);
             }
@@ -57,10 +74,10 @@ public class CriticalNodes {
 
             //Remove 1 Vertice from Input graph
             Iterator iterator = edgeList.iterator();
-            while(iterator.hasNext()) {
+            while (iterator.hasNext()) {
                 List<Integer> edge = (List<Integer>) iterator.next();
 
-                if(edge.contains(v)) {
+                if (edge.contains(v)) {
                     iterator.remove();
                 }
             }
@@ -71,7 +88,7 @@ public class CriticalNodes {
 
             //Convert List to Array
             int[][] edgesWithoutOneVertice = new int[edgeList.size()][2];
-            for(int x = 0; x < edgeList.size(); x++) {
+            for (int x = 0; x < edgeList.size(); x++) {
                 List<Integer> edge = edgeList.get(x);
                 edgesWithoutOneVertice[x][0] = edge.get(0);
                 edgesWithoutOneVertice[x][1] = edge.get(1);
@@ -81,21 +98,17 @@ public class CriticalNodes {
 
             //Check connection
             int quantityOfNodes = vertices.size() > 0 ? (vertices.size()) : 0;
-            int n = solve(quantityOfNodes, edgesWithoutOneVertice);
-
-            if (n > 2) {
+            int ccAfterRemoveOneVertice = checkConnection(quantityOfNodes, edgesWithoutOneVertice);
+            if (ccAfterRemoveOneVertice > (ccInitial+1)) {
                 answer.add(v);
             }
 
-            //System.out.println("# connected components: " + n);
         }
 
-
-        System.out.println(Arrays.toString(answer.toArray()));
+        return answer.stream().sorted(Comparator.reverseOrder()).mapToInt(i->i).toArray();
     }
 
-
-    public static int solve(int nodeNum,  int[][] edges) {
+    public int checkConnection(int nodeNum, int[][] edges) {
 
         Graph g = new Graph(nodeNum);
 
@@ -106,7 +119,6 @@ public class CriticalNodes {
         CC cc = new CC(g);
         return cc.count;
     }
-
 }
 
 
@@ -164,10 +176,10 @@ class Graph {
 
 class CC {
 
-    public boolean[] marked;   // marked[v] = has vertex v been marked?
-    public int[] id;           // id[v] = id of connected component containing v
-    public int[] size;         // size[id] = number of vertices in given component
-    public int count;          // number of connected components
+    public boolean[] marked;
+    public int[] id;
+    public int[] size;
+    public int count;
 
     public CC(Graph G) {
         marked = new boolean[G.V()];
