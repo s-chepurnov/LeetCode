@@ -26,35 +26,78 @@ import java.util.*;
 public class MinimalCostToRepairRoads {
 
     public static void main(String[] args) {
-        int numTotalAvailableCities = 5;
+
+
+        //Expected: 20
+        //int numTotalAvailableCities = 5;
+        //int numRoadsToBeRepaired = 3;
         int numTotalAvailableRoads = 5;
-        int numRoadsToBeRepaired = 3;
+        int[][] edges = {{1, 2}, {2, 3}, {3, 4}, {4, 5}, {1, 5}};
+        int[][] edgesToRepair = {{1, 2, 12}, {3, 4, 30}, {1, 5, 8}};
 
-        EdgeWeightedGraph g = new EdgeWeightedGraph(numTotalAvailableRoads + 1);
-        g.addEdge(new Edge(1,2,12));
-        g.addEdge(new Edge(2,3,0));
-        g.addEdge(new Edge(3,4,30));
-        g.addEdge(new Edge(4,5,0));
-        g.addEdge(new Edge(5,1,8));
+        //Expected: 410
+//        int numTotalAvailableRoads = 6;
+//        int[][] edges = {{1, 2}, {2, 3}, {4, 5}, {3, 5}, {1, 6}, {2, 4}};
+//        int[][] edgesToRepair = {{1, 6, 410}, {2, 4, 800}};
 
-        int minCost = solve(g);
+        //Expected: 79
+//        int numTotalAvailableRoads = 6;
+//        int[][] edges = {{1, 2}, {2, 3}, {4, 5}, {5, 6}, {1, 5}, {2, 4}, {3, 4}};
+//        int[][] edgesToRepair = {{1, 5, 110}, {2, 4, 84}, {3, 4, 79}};
+
+
+        SolutionMinCostToRepairRoads sl = new SolutionMinCostToRepairRoads();
+        int minCost = sl.solve(numTotalAvailableRoads, edges, edgesToRepair);
+
         System.out.println("minimal cost to repair roads and connect all cities: " + minCost);
     }
 
-    public static int solve(EdgeWeightedGraph g) {
+}
+
+class SolutionMinCostToRepairRoads {
+
+    public int solve(int numTotalAvailableRoads, int[][] edges, int[][] edgesToRepair) {
+
+        EdgeWeightedGraph g = new EdgeWeightedGraph(numTotalAvailableRoads + 1);
+
+        for (int[] edge : edges) {
+            int weight = findWeight(edge[0], edge[1], edgesToRepair);
+
+            //init Graph
+            g.addEdge(new Edge(edge[0], edge[1], weight));
+        }
+
+//        g.addEdge(new Edge(1,2,12));
+//        g.addEdge(new Edge(2,3,0));
+//        g.addEdge(new Edge(3,4,30));
+//        g.addEdge(new Edge(4,5,0));
+//        g.addEdge(new Edge(5,1,8));
 
         UF uf = new UF(g.V);
+
         //no need to repair, already connected
-        uf.union(2,3);
-        uf.union(4,5);
+        //uf.union(2,3);
+        //uf.union(4,5);
 
         KruskalMST mst = new KruskalMST(g, uf);
 
-        for (Edge e : mst.mst) {
-            System.out.println(" " + e);
-        }
+        //print graph
+//        for (Edge e : mst.mst) {
+//            System.out.println(" " + e);
+//        }
 
         return mst.weight;
+    }
+
+    private int findWeight(int x, int y, int[][] edgesToRepair) {
+        int weight = 0;
+        for (int[] edge : edgesToRepair) {
+            if(edge[0] == x && edge[1] == y) {
+                weight = edge[2];
+                return weight;
+            }
+        }
+        return weight;
     }
 }
 

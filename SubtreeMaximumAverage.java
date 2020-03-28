@@ -33,7 +33,7 @@ public class SubtreeMaximumAverage {
 
         List<MAryTreeNode> children6 = new ArrayList<>();
         children6.add(node3);
-        children6.add(node4/*null*/);
+        children6.add(node4);
         MAryTreeNode node6 = new MAryTreeNode();
         node6.val = 13;
         node6.children = children6;
@@ -65,7 +65,6 @@ class SolutionSubtreeMaxAvg {
         if (root == null) return null;
 
         Result result = recursive(root);
-        //System.out.println("max average value: " + result.maxAvg);
         return result.maxRoot;
     }
 
