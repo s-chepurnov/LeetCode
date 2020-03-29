@@ -29,8 +29,6 @@ public class MinimalCostToRepairRoads {
 
 
         //Expected: 20
-        //int numTotalAvailableCities = 5;
-        //int numRoadsToBeRepaired = 3;
         int numTotalAvailableRoads = 5;
         int[][] edges = {{1, 2}, {2, 3}, {3, 4}, {4, 5}, {1, 5}};
         int[][] edgesToRepair = {{1, 2, 12}, {3, 4, 30}, {1, 5, 8}};
@@ -45,9 +43,28 @@ public class MinimalCostToRepairRoads {
 //        int[][] edges = {{1, 2}, {2, 3}, {4, 5}, {5, 6}, {1, 5}, {2, 4}, {3, 4}};
 //        int[][] edgesToRepair = {{1, 5, 110}, {2, 4, 84}, {3, 4, 79}};
 
+        //Expected: 22
+//        int numTotalAvailableRoads = 8;
+//        int[][] edges = {{1, 2},{4, 5},{5, 7},{6, 7},{7, 8}};
+//        int[][] edgesToRepair = {{2, 4, 100},{2, 4, 16},{2, 3, 7},{2, 5, 15},{3, 8, 17}};
+
+        //Expected: -1
+//        int numTotalAvailableRoads = 6;
+//        int[][] edges = {};
+//        int[][] edgesToRepair = {{1, 4, 100},{2, 4, 10},{2, 3, 7},{2, 5, 15},{2, 1, 17},{5, 3, 1}};
+
+        //Expected: 0
+//        int numTotalAvailableRoads = 8;
+//        int[][] edges = {{1, 2}, {2, 3}, {4, 3}, {4, 5}, {5, 7}, {6, 7}, {7, 8}};
+//        int[][] edgesToRepair = {{3, 8, 1}, {4, 7, 9}};
+
+        //Expected: -1
+//        int numTotalAvailableRoads = 1;
+//        int[][] edges = {};
+//        int[][] edgesToRepair = {};
 
         SolutionMinCostToRepairRoads sl = new SolutionMinCostToRepairRoads();
-        int minCost = sl.solve(numTotalAvailableRoads, edges, edgesToRepair);
+        int minCost = sl.minCostToRepairEdges(numTotalAvailableRoads, edges, edgesToRepair);
 
         System.out.println("minimal cost to repair roads and connect all cities: " + minCost);
     }
@@ -56,19 +73,35 @@ public class MinimalCostToRepairRoads {
 
 class SolutionMinCostToRepairRoads {
 
-    public int solve(int numTotalAvailableRoads, int[][] edges, int[][] edgesToRepair) {
+    public int minCostToRepairEdges(int n, int[][] edges, int[][] edgesToRepair) {
 
-        EdgeWeightedGraph g = new EdgeWeightedGraph(numTotalAvailableRoads + 1);
+        if (edges == null || edgesToRepair == null || (edges.length == 0 && edgesToRepair.length == 0)) {
+            return -1;
+        }
 
-        //init Graph
+        //node 0 exists only for convenience, but the code ignore it
+        EdgeWeightedGraph g = new EdgeWeightedGraph(n + 1);
+
+        //init Graph e.g.
 //        g.addEdge(new Edge(1,2,12));
 //        g.addEdge(new Edge(2,3,0));
 //        g.addEdge(new Edge(3,4,30));
 //        g.addEdge(new Edge(4,5,0));
 //        g.addEdge(new Edge(5,1,8));
+
+        //connect roads, init Graph
         for (int[] edge : edges) {
-            int weight = findWeight(edge[0], edge[1], edgesToRepair);
-            g.addEdge(new Edge(edge[0], edge[1], weight));
+            g.addEdge(new Edge(edge[0], edge[1], 0));
+        }
+
+        //check Connected Components for this Graph with weights, if all connected (cc.count == 1) then return 0$ cost
+        if (isNodesConnected(g, n)) {
+            return 0;
+        }
+
+        //set weight for some edges
+        for (int[] edge : edgesToRepair) {
+            g.addEdge(new Edge(edge[0], edge[1], edge[2]));
         }
 
         UF uf = new UF(g.V);
@@ -80,24 +113,48 @@ class SolutionMinCostToRepairRoads {
         KruskalMST mst = new KruskalMST(g, uf);
 
         //print graph
-//        for (Edge e : mst.mst) {
-//            System.out.println(" " + e);
-//        }
+        //for (Edge e : mst.mst) {
+        //    System.out.println(" " + e);
+        //}
 
-        return mst.weight;
+        // number of components when all cities are connected
+        // 2 because we use node0 in the code that doesn't count, so 2 cc means 1 cc.
+        if (uf.count == 2) {
+            return mst.weight;
+        } else {
+            return -1;
+        }
+
     }
 
-    private int findWeight(int x, int y, int[][] edgesToRepair) {
-        int weight = 0;
-        for (int[] edgeToRepair : edgesToRepair) {
-            if(edgeToRepair[0] == x && edgeToRepair[1] == y) {
-                weight = edgeToRepair[2];
-                return weight;
+    public boolean isNodesConnected(EdgeWeightedGraph G, int n) {
+
+        boolean[] marked = new boolean[n+1];
+
+        //mark unexisted element; node0 is only for convenience
+        marked[0] = true;
+        dfs(marked, 1, G);
+
+        for (int i = 0; i < n; ++i) {
+            if ( !marked[i]) {
+                return false;
             }
         }
-        return weight;
+
+        return true;
     }
+
+    public void dfs(boolean[] marked, int v, EdgeWeightedGraph G) {
+        marked[v] = true;
+        for (Edge edge : G.adj(v)) {
+            if (!marked[edge.w]) {
+                dfs(marked, edge.w, G);
+            }
+        }
+    }
+
 }
+
 
 class Edge implements Comparable<Edge> {
 
@@ -224,7 +281,8 @@ class KruskalMST {
             int p = edge.either();
             int q = edge.other(p);
 
-            if ( !uf.connected(p,q)) { //edge p-q does not create cycle
+            //3 connect p-q in UF if edge p-q does not create a cycle
+            if ( !uf.connected(p,q)) {
                 uf.union(p,q);
                 mst.offer(edge);
                 weight += edge.weight;
@@ -236,9 +294,9 @@ class KruskalMST {
 
 class UF {
 
-    private int[] parent;  // parent[i] = parent of i
-    private byte[] rank;   // rank[i] = rank of subtree rooted at i (never more than 31)
-    private int count;     // number of components
+    public int[] parent;  // parent[i] = parent of i
+    public byte[] rank;   // rank[i] = rank of subtree rooted at i (never more than 31)
+    public int count;     // number of components
 
     public UF (int n) {
         if (n < 0) throw new IllegalArgumentException();
