@@ -4,10 +4,9 @@ import java.util.*;
 
 public class TreasureIslandII {
 
-    private static final int[][] DIRS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-
     public static void main(String[] args) {
 
+        //Expected 3
         char input[][] = {
                 {'S','O','O','S','S'},
                 {'D','O','D','O','D'},
@@ -17,20 +16,26 @@ public class TreasureIslandII {
                 {'X','D','D','D','O'},
         };
 
-        /* input from "TreasureIsland I"
+        // input from "TreasureIsland I"
+        /*
         char[][] input =   {{'S', 'O', 'O', 'O'},
                             {'D', 'O', 'D', 'O'},
                             {'O', 'O', 'O', 'O'},
                             {'X', 'D', 'D', 'O'}};
         */
 
-        int n = solve(input);
+        SolutionTreasureIslandII sl = new SolutionTreasureIslandII();
+        int n = sl.solve(input);
 
         System.out.println("# " + n);
-
     }
+}
 
-    public static int solve(char[][] input) {
+class SolutionTreasureIslandII {
+
+    private final int[][] DIRS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
+    public int solve(char[][] input) {
 
         List<Point> starts = new ArrayList();
         for (int i=0; i < input.length; ++i) {
@@ -58,7 +63,7 @@ public class TreasureIslandII {
                 .findFirst().get();
     }
 
-    public static int resolveOne(char[][] input, Point start, boolean[][] visited) {
+    public int resolveOne(char[][] input, Point start, boolean[][] visited) {
 
         Queue<Point> queue = new LinkedList<>();
         queue.offer(start);
@@ -95,7 +100,7 @@ public class TreasureIslandII {
         return steps;
     }
 
-    public static boolean valid(char[][] input, int x, int y, boolean[][] visited) {
+    public boolean valid(char[][] input, int x, int y, boolean[][] visited) {
 
         int x_size = input.length;
         int y_size = input[0].length;
@@ -106,6 +111,7 @@ public class TreasureIslandII {
 
         return false;
     }
+
 }
 
 class Point {

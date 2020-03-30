@@ -13,17 +13,31 @@ import java.util.Objects;
  */
 public class TreasureIslandI {
 
-    public static List<List<Point>> result = new ArrayList<>();
 
     public static void main(String[] args) {
 
+        //5
         String input[][] = {
                 {"O","O","O","O"},
                 {"D","O","D","O"},
                 {"O","O","O","O"},
                 {"X","D","D","O"}
         };
-        solve(input);
+
+        SolutionTreasureIslandI sl = new SolutionTreasureIslandI();
+        int n = sl.solve(input);
+
+        System.out.println("The minimum route takes steps : " + n );
+    }
+
+}
+
+class SolutionTreasureIslandI {
+    public List<List<Point>> result = new ArrayList<>();
+
+    public int solve(String[][] input) {
+
+        recursive(input, 0, 0, new ArrayList<>());
 
         //System.out.println("Number of all possible paths: " + result.size());
 
@@ -32,16 +46,11 @@ public class TreasureIslandI {
                 .min(Comparator.comparing(List::size))
                 .orElse(new ArrayList<>());
 
-        System.out.println("The minimum route takes steps : " + (list.size() - 1) );
+        int n = list.size() - 1;
+        return n;
     }
 
-    public static void solve(String[][] input) {
-
-        recursive(input, 0, 0, new ArrayList<>());
-
-    }
-
-    public static void recursive(String[][] input, int x, int y, List<Point> path) {
+    public void recursive(String[][] input, int x, int y, List<Point> path) {
 
         if ( !valid(input, x, y,path)) {
             return;
@@ -62,7 +71,7 @@ public class TreasureIslandI {
     }
 
 
-    public static boolean valid(String[][] input, int x, int y, List<Point> path) {
+    public boolean valid(String[][] input, int x, int y, List<Point> path) {
 
         int x_size = input.length;
         int y_size = input[0].length;
