@@ -1,7 +1,16 @@
-package org.algs4;
+package com.amazon.oa;
 
 import java.util.*;
 
+/**
+ * The worst case of Kruskal Algorithm E log E
+ *
+ * build PQ - E [1 time]
+ * delete min - log E [E times]
+ * //union - log V [V times]
+ * //connected - log V [E times]
+ *
+ */
 public class MinCostToConnectAllNodes {
 
     public static void main(String[] args) {

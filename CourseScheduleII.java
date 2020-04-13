@@ -1,3 +1,5 @@
+package com.amazon.oa;
+
 import java.util.*;
 
 /**
@@ -13,7 +15,7 @@ import java.util.*;
  */
 public class CourseScheduleII {
     public static void main(String[] args) {
-        Solution s = new Solution();
+        SolutionCourseScheduleII s = new SolutionCourseScheduleII();
 
         int m[][] = { {1, 0}, {2, 0}, {3, 1}, {3, 2}};
         int arr[] = s.findOrder(4, m);
@@ -22,9 +24,9 @@ public class CourseScheduleII {
     }
 }
 
-class Solution {
+class SolutionCourseScheduleII {
     public int[] findOrder(int numCourses, int[][] prerequisites) {
-        Graph graph = new Graph(numCourses);
+        DiGraph graph = new DiGraph(numCourses);
         for(int[] pair : prerequisites) {
             graph.adj[pair[1]].add(pair[0]);
             graph.indegree[pair[0]]++;
@@ -58,7 +60,7 @@ class BFS {
         topologicalOrder = new int[V];
     }
 
-    public void bfs(Graph G, List<Integer> sl) {
+    public void bfs(DiGraph G, List<Integer> sl) {
         Deque<Integer> queue = new LinkedList<>();
         for(Integer s : sl){
             queue.add(s);
@@ -81,12 +83,12 @@ class BFS {
     }
 }
 
-class Graph {
+class DiGraph {
     public final int V;
     public List<Integer>[] adj;
     public int indegree[];
 
-    public Graph(int V) {
+    public DiGraph(int V) {
         this.V = V;
         adj = (ArrayList<Integer>[]) new ArrayList[this.V];
         indegree = new int[V];

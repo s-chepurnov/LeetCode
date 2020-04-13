@@ -1,4 +1,4 @@
-package org.algs4;
+package com.amazon.oa;
 
 import java.util.Arrays;
 
@@ -35,26 +35,30 @@ class SolutionMoviesOnFlight {
         for (int i = 0; i < movie_duration.length; ++i) {
             for (int j = 0; j < movie_duration.length; ++j) {
 
-                int localMax = movie_duration[i]+movie_duration[j];
+                //You cannot pick the same element twice.
+                if(i == j) continue;
 
-                if (localMax == maxDuration) {
+                int sum = movie_duration[i] + movie_duration[j];
+
+                if (sum == maxDuration) {
                     arr[0] = movie_duration[i];
                     arr[1] = movie_duration[j];
 
                     return arr;
-                }
-
-                if (localMax < maxDuration && (maxDuration - localMax) < maxWithMinDifference) {
+                } else if (sum < maxDuration && (maxDuration - sum) < maxWithMinDifference) {
                     arr[0] = movie_duration[i];
                     arr[1] = movie_duration[j];
-                    maxWithMinDifference = (maxDuration - localMax);
+                    maxWithMinDifference = (maxDuration - sum);
+                } else {
+                    continue;
                 }
 
             }
         }
 
         if (arr[0] == -1 || arr[1] == -1) {
-            //return smth special
+            return null;
+            //return empty List?
         }
 
         return arr;

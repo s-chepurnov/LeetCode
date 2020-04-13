@@ -1,4 +1,4 @@
-package org.algs4;
+package com.amazon.oa;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,7 +24,7 @@ public class TopNBuzzwords {
         SolutionBuzzwords solution = new SolutionBuzzwords();
         List<String> result = solution.solve(numToys, topToys, toys, numQuotes, quotes);
 
-        //System.out.println("result: " + Arrays.toString(result.toArray()));
+        System.out.println("result: " + Arrays.toString(result.toArray()));
 
     }
 }

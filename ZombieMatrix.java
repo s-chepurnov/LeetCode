@@ -1,4 +1,4 @@
-package org.algs4;
+package com.amazon.oa;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +119,7 @@ class SolutionZombie {
     }
 
 }
-
+/*
 class Point {
     public int x;
     public int y;
@@ -129,3 +129,4 @@ class Point {
         this.y = y;
     }
 }
+*/

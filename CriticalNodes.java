@@ -1,4 +1,4 @@
-package org.algs4;
+package com.amazon.oa;
 
 import java.util.*;
 
@@ -121,7 +121,7 @@ class SolutionCN {
     }
 }
 
-
+/*
 class Graph {
 
     private static final String NEWLINE = System.getProperty("line.separator");
@@ -174,6 +174,7 @@ class Graph {
 
 }
 
+
 class CC {
 
     public boolean[] marked;
@@ -204,3 +205,4 @@ class CC {
         }
     }
 }
+*/

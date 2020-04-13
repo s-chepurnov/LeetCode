@@ -1,4 +1,4 @@
-package org.algs4;
+package com.amazon.oa;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -84,7 +84,7 @@ class SolutionTreasureIslandI {
         return false;
     }
 }
-
+/*
 class Point {
     public int x;
     public int y;
@@ -109,3 +109,4 @@ class Point {
         return Objects.hash(x, y);
     }
 }
+*/

@@ -1,4 +1,4 @@
-package org.algs4;
+package com.amazon.oa;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +94,7 @@ class SolutionSubtreeMaxAvg {
         //System.out.println("current average: " + currentAvg);
 
         //find max average from children
-        Result maxChildrenResult = childrenResults.stream().max((o1,o2) -> Integer.compare(o1.maxAvg,o2.maxAvg)).get();
+        Result maxChildrenResult = childrenResults.stream().max((o1, o2) -> Integer.compare(o1.maxAvg,o2.maxAvg)).get();
 
 
         MAryTreeNode totalMaxRoot = null;

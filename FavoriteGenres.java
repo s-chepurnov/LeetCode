@@ -1,4 +1,4 @@
-package org.algs4;
+package com.amazon.oa;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 public class FavoriteGenres {
 
     public static void main(String[] args) {
-
+/*
         //Expected:
         //"David": ["Rock", "Techno"],
         //"Emma":  ["Pop"]
@@ -20,6 +20,18 @@ public class FavoriteGenres {
         genreMap.put("Techno", Arrays.asList("song2", "song4"));
         genreMap.put("Pop", Arrays.asList("song5", "song6"));
         genreMap.put("Jazz", Arrays.asList("song8", "song9"));
+*/
+        Map<String, List<String>> userMap = new HashMap<>();
+        userMap.put("David", Arrays.asList("song1", "song2"));
+        userMap.put("Emma", Arrays.asList("song3", "song4"));
+
+        Map<String, List<String>> genreMap = new HashMap<>();
+
+//        Expected:
+//        Output: {
+//            "David": [],
+//            "Emma":  []
+//        }
 
         SolutionFavoriteGenres sl = new SolutionFavoriteGenres();
         Map<String, List<String>> result = sl.solve(userMap, genreMap);
@@ -122,7 +134,7 @@ class SolutionFavoriteGenres {
                                 return "";
                          })
                 .filter(x -> x != null && !x.isEmpty())
-                .findFirst().orElse("findGenreFailed");
+                .findFirst().orElse("");
 
         return genre;
     }

@@ -1,6 +1,4 @@
-package org.algs4;
-
-import java.util.*;
+package com.amazon.oa;
 
 /**
  * Using a set of roads, broken roads and repair costs,
@@ -155,7 +153,7 @@ class SolutionMinCostToRepairRoads {
 
 }
 
-
+/*
 class Edge implements Comparable<Edge> {
 
     int v;
@@ -345,3 +343,4 @@ class UF {
         count--;
     }
 }
+*/

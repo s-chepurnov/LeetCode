@@ -1,4 +1,4 @@
-package org.algs4;
+package com.amazon.oa;
 
 /**
  * Given a 2d grid map of '1's (land) and '0's (water), count the number of islands.
@@ -9,7 +9,7 @@ package org.algs4;
 public class NumberOfIslands {
 
     public static void main(String[] args) {
-        Solution solution = new Solution();
+        SolutionNumberOfIslands solution = new SolutionNumberOfIslands();
 
         char[][] grid = {   {1,1,1,1,0},
                             {1,1,0,1,0},
@@ -23,7 +23,7 @@ public class NumberOfIslands {
     }
 }
 
-class Solution {
+class SolutionNumberOfIslands {
 
     public int numIslands(char[][] grid) {
 

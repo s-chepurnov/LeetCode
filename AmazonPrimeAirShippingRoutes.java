@@ -1,3 +1,5 @@
+package com.amazon.oa;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,6 +70,23 @@ public class AmazonPrimeAirShippingRoutes {
         int forwardRouteArr[][] = {{1, 3000}, {2, 5000}, {3, 7000}, {4, 10000}};
         int backRouteArr[][] = {{1, 2000}, {2, 3000}, {3, 4000}, {4, 5000}};
 
+        SolutionAmazonPrimeAirShippingRoutes sl = new SolutionAmazonPrimeAirShippingRoutes();
+        List<ResultRoutes> output = sl.solve(maxTravelDist, forwardRouteArr, backRouteArr);
+
+        System.out.println(output.toString());
+    }
+
+
+}
+
+//O(n) = (Forward_n * Back_n) + NlogN + (Forward_n+Back_n)
+//Forward_n = forwardRouteArr.length
+//Back_n = backRouteArr.length
+//N = Forward_n*Back_n
+class SolutionAmazonPrimeAirShippingRoutes {
+
+    public List<ResultRoutes> solve(int maxTravelDist, int forwardRouteArr[][], int backRouteArr[][]) {
+        //init
         List<Dist> forwardList = new ArrayList<>();
         List<Dist> backList = new ArrayList<>();
 
@@ -79,24 +98,19 @@ public class AmazonPrimeAirShippingRoutes {
             backList.add(new Dist(backRouteArr[i][0], backRouteArr[i][1]));
         }
 
-
-        List<Result> output = solve(maxTravelDist, forwardList, backList);
-        System.out.println(output.toString());
-    }
-
-    public static List<Result> solve(int maxTravelDist, List<Dist> forwardList, List<Dist> backList) {
-        List<Result> allCombinations = new ArrayList<>();
+        //solve
+        List<ResultRoutes> allCombinations = new ArrayList<>();
 
         for(Dist forward : forwardList) {
             for(Dist back : backList) {
-                allCombinations.add(new Result(forward.id, back.id, forward.dist + back.dist));
+                allCombinations.add(new ResultRoutes(forward.id, back.id, forward.dist + back.dist));
             }
         }
 
         allCombinations = allCombinations.stream()
-                    .filter(f -> f.sum <= maxTravelDist)
-                    .sorted((r1, r2) -> r2.sum.compareTo(r1.sum))
-                    .collect(Collectors.toList());
+                .filter(f -> f.sum <= maxTravelDist)
+                .sorted((r1, r2) -> r2.sum.compareTo(r1.sum))
+                .collect(Collectors.toList());
 
         int max = allCombinations.get(0).sum;
         int index = 0;
@@ -112,6 +126,7 @@ public class AmazonPrimeAirShippingRoutes {
 
         return allCombinations.subList(0, index);
     }
+
 }
 
 class Dist {
@@ -129,12 +144,12 @@ class Dist {
     }
 }
 
-class Result {
+class ResultRoutes {
     public final int idF;
     public final int idB;
     public final Integer sum;
 
-    public Result(int idF, int idB, int sum) {
+    public ResultRoutes(int idF, int idB, int sum) {
         this.idF = idF;
         this.idB = idB;
         this.sum = sum;

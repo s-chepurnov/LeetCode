@@ -1,3 +1,5 @@
+package com.amazon.oa;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,7 @@ public class AmazonFresh {
     }
 }
 
+/*
 class Point {
     public final int x;
     public final int y;
@@ -54,3 +57,4 @@ class Point {
         return "["  + x + ", " + y + "]";
     }
 }
+*/

@@ -1,4 +1,4 @@
-package org.algs4;
+package com.amazon.oa;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,15 +32,16 @@ public class LoadBalancer {
             list.add(2);
         }
 
-
         int[] A = list.stream().mapToInt(i->i).toArray(); //([1, 2] * 10000) // true
 
         boolean result = solution.loadBalance(A);
         System.out.println("isPossible: " + result);
     }
-
 }
 
+// N - size of array
+// O(N) = N
+// pivots from each side until they are meet each other
 class SolutionLB {
 
     public boolean loadBalance(int[] arr) {
