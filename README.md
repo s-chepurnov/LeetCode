@@ -1,5 +1,6 @@
 # LeetCode
-There are algorithms and solutions
+There are algorithms and solutions from LeetCode and other resources
 
-# OCA - Online Coding Assessment
-IDE directory with tasks
+# Assessment
+Online Coding Assessment 
+Amazon, Google 
