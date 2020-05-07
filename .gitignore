@@ -1,7 +1,4 @@
 # IntelliJ
-OCA/out/
-OCA/.idea/*
-OCA/*.iml
 out/
 .idea/*
 *.iml
